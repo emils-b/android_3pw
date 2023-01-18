@@ -7,21 +7,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    static final String INPUT_FIELD_TXT_KEY = "input_field_txt_key";
+    static final String INPUT_FIELD_TXT_KEY = "stored_value";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         String savedTextInput = sharedPref.getString(INPUT_FIELD_TXT_KEY, "");
+
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_SHORT;
 
         EditText inputField = findViewById(R.id.txtInputField);
         inputField.setText(savedTextInput);
@@ -52,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String inputFieldTxt = inputField.getText().toString();
+                Log.d("savedText", inputFieldTxt);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString(INPUT_FIELD_TXT_KEY, inputFieldTxt);
                 editor.apply();
@@ -65,8 +71,10 @@ public class MainActivity extends AppCompatActivity {
 
                 if (selectedTheme.equals("Dark theme")) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    Toast.makeText(context,"Dark mode", duration).show();
                 } else if (selectedTheme.equals("Light theme")) {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    Toast.makeText(context,"Light mode", duration).show();
                 } else {
                     // TODO implement default to take from SharedPreferences
                     // For now setting to light theme
